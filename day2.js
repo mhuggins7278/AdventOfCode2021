@@ -1056,11 +1056,4 @@ moves.map((move) => {
   }
 });
 
-depth;
-distance;
-
 console.log(depth * distance);
-
-const negative_depth = 3 + 1 * -1;
-
-negative_depth;
