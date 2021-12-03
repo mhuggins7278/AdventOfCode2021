@@ -34,7 +34,7 @@ Object.values(output).forEach((item, index) => {
 epsilonInt = parseInt(epsilon.join(''), 2);
 gammaInt = parseInt(gamma.join(''), 2);
 
-console.log(gammaInt * epsilonInt);
+console.log(`part1 answer: ${gammaInt * epsilonInt}`);
 
 // part2
 
@@ -62,7 +62,7 @@ const filterRows = (rows, index, most) => {
   });
   if (filteredRows.length == 1) {
     value = parseInt(filteredRows[0], 2);
-    value;
+    console.log(value);
     return value;
   }
   index = index + 1;
@@ -74,4 +74,4 @@ const co2_scrub = filterRows(rows, 0, false);
 
 ls_rating = oxy_gen * co2_scrub;
 
-ls_rating;
+console.log(`part two answer: ${ls_rating}`);
