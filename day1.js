@@ -151,6 +151,13 @@ const values = [
   3755, 3762, 3769, 37700,
 ];
 
+const assert = (val) => {
+  if (!val) {
+    throw new Error('Assertion failed');
+  }
+  console.log('pass');
+};
+
 let previousValue = null;
 const count = values.reduce((acc, next) => {
   if (previousValue) {
@@ -164,27 +171,21 @@ const count = values.reduce((acc, next) => {
 
 count;
 
-const chunks = [];
-
-values.forEach((value, index, origArray) => {
-  if (origArray[index + 2]) {
-    chunks.push([value, origArray[index + 1], origArray[index + 2]]);
-  }
-});
 
 let previousChunkValue = null;
-const chunkCount = chunks.reduce((acc, curr) => {
-  let currValue = null;
-  currValue = curr.reduce((a, b) => a + b, 0);
-  if (previousChunkValue) {
-    if (currValue > previousChunkValue) {
+const chunkCount = values.reduce((acc, currentValue, index, origArray) => {
+  if (origArray[index + 2]) {
+    currentChunkValue =
+      currentValue + origArray[index + 1] + origArray[index + 2];
+    currentChunkValue;
+    if (previousChunkValue && currentChunkValue > previousChunkValue) {
       acc++;
     }
+    previousChunkValue = currentChunkValue;
   }
-  previousChunkValue = currValue;
   return acc;
 }, 0);
 
-chunkCount;
+chunkCount
 
-//loop over an array and diff the next 3 values from the 3 values after that  and add to a counter if the next value is greater than the previous value
+
