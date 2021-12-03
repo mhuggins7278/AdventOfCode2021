@@ -22,7 +22,6 @@ epsilon = [];
 gamma = [];
 
 Object.values(output).forEach((item, index) => {
-  console.log(item, index);
   if (item['0'] > item['1']) {
     gamma.push(0);
     epsilon.push(1);
@@ -36,3 +35,43 @@ epsilonInt = parseInt(epsilon.join(''), 2);
 gammaInt = parseInt(gamma.join(''), 2);
 
 console.log(gammaInt * epsilonInt);
+
+// part2
+
+const getMostFrequentCharAtIndex = (items, index) => {
+  let counts = items.reduce((acc, item) => {
+    const char = item.trim().charAt(index);
+    if (acc[char]) {
+      acc[char]++;
+    } else {
+      acc[char] = 1;
+    }
+    return acc;
+  }, {});
+  return counts[0] > counts[1] ? 0 : 1;
+};
+
+const filterRows = (rows, index, most) => {
+  const mostFrequentChar = getMostFrequentCharAtIndex(rows, index);
+  const filteredRows = rows.filter((row) => {
+    if (most) {
+      return parseInt(row.charAt(index), 2) === mostFrequentChar;
+    } else {
+      return parseInt(row.charAt(index), 2) !== mostFrequentChar;
+    }
+  });
+  if (filteredRows.length == 1) {
+    value = parseInt(filteredRows[0], 2);
+    value;
+    return value;
+  }
+  index = index + 1;
+  filterRows(filteredRows, index++, most);
+};
+
+const oxy_gen = filterRows(rows, 0, true);
+const co2_scrub = filterRows(rows, 0, false);
+
+ls_rating = oxy_gen * co2_scrub;
+
+ls_rating;
