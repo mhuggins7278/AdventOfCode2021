@@ -66,7 +66,7 @@ const filterRows = (rows, index, most) => {
     return value;
   }
   index = index + 1;
-  filterRows(filteredRows, index++, most);
+  return filterRows(filteredRows, index++, most);
 };
 
 const oxy_gen = filterRows(rows, 0, true);
