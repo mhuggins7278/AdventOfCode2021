@@ -62,7 +62,6 @@ const filterRows = (rows, index, most) => {
   });
   if (filteredRows.length == 1) {
     value = parseInt(filteredRows[0], 2);
-    console.log(value);
     return value;
   }
   index = index + 1;
