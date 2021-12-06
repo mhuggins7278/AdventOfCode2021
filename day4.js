@@ -1,80 +1,72 @@
 const fs = require('fs');
 const assert = require('assert');
 
-const rawData = fs.readFileSync('./data/day4.test', 'utf8').split('\n');
+const rawData = fs.readFileSync('./data/day4.txt', 'utf8').split('\n');
 
 const numbers = rawData
   .splice(0, 1)[0]
   .split(',')
   .map((item) => parseInt(item));
 
-console.log(numbers.slice(-1));
-
-const boards = [];
+const boards = new Map();
+const winningScores = [];
+const calledNumbers = numbers.splice(0, 5);
 
 const filteredData = rawData.filter((line) => line.length > 0);
 
-function generateBoards(filteredData) {
-  const rows = filteredData.splice(0, 5);
-  const board = rows.map((row) => {
-    return row
-      .split(' ')
-      .filter((item) => item.length > 0)
-      .map((item) => parseInt(item));
-  });
-  boards.push(board);
-
-  if (filteredData.length >= 5) {
-    generateBoards(filteredData);
+function generateBoards() {
+  let iteration = 0;
+  while (filteredData.length >= 5) {
+    const rows = filteredData.splice(0, 5);
+    const board = rows.map((row) => {
+      return row
+        .split(' ')
+        .filter((item) => item.length > 0)
+        .map((item) => parseInt(item));
+    });
+    boards.set(iteration, board);
+    iteration++;
   }
 }
 
-function checkForWin(calledNumbers) {
-  sumOfUnMarkedNumbers = null;
-
-  calledNumbers;
-  for (var board of boards) {
-    // check each row in the board for a win
-    for (var row of board) {
-      if (row.every((item) => calledNumbers.includes(item))) {
-        // console.log(`Win! ${row} ${calledNumbers.at(-1)}`);
-        const sumOfUnMarkedNumbers = board.reduce((acc, curr) => {
-          curr.forEach((square) => {
-            if (!calledNumbers.includes(square)) {
-              acc += square;
-            }
-          });
-          return acc;
-        }, 0);
-        return sumOfUnMarkedNumbers * calledNumbers.at(-1);
-        return;
+function sumUnMarkedNumbers(board) {
+  return board.reduce((acc, row) => {
+    row.forEach((square) => {
+      if (!calledNumbers.includes(square)) {
+        acc += square;
       }
-    }
-    //check each column in the board for a win
+    });
+    return acc;
+  }, 0);
+}
+
+function checkForWinners() {
+  boards.forEach((board, key) => {
+    const columns = [];
     for (let i = 0; i < 5; i++) {
-      const column = board.map((row) => row[i]);
-      if (column.every((item) => calledNumbers.includes(item))) {
-        // console.log(`Win! ${column} ${calledNumbers.at(-1)}`);
-        sumOfUnMarkedNumbers = board.reduce((acc, curr) => {
-          curr.forEach((square) => {
-            if (!calledNumbers.includes(square)) {
-              acc += square;
-            }
-          });
-          return acc;
-        }, 0);
-        return sumOfUnMarkedNumbers * calledNumbers.at(-1);
+      columns.push(board.map((row) => row[i]));
+    }
+    for (var row of [...board, ...columns]) {
+      if (row.every((item) => calledNumbers.includes(item))) {
+        // sumOfUnMarkedNumbers = sumUnMarkedNumbers(board);
+        winningScores.push(sumUnMarkedNumbers(board) * calledNumbers.at(-1));
+        //Don't check anymore rows on this board
+        boards.delete(key);
+        break;
       }
     }
-  }
+  });
 
-  if (numbers.length > 0 && !sumOfUnMarkedNumbers) {
-    const newNumbers = [...calledNumbers, numbers.splice(0, 1)[0]];
-    return checkForWin(newNumbers);
+  if (numbers.length && boards.size) {
+    calledNumbers.push(numbers.splice(0, 1)[0]);
+    return checkForWinners();
   }
 }
 
 generateBoards(filteredData);
-const part1answer = checkForWin(numbers.splice(0, 5));
 
-console.log(part1answer);
+checkForWinners();
+
+console.log(`part1answer: ${winningScores[0]}`);
+
+console.log(`part2answer: ${winningScores.at(-1)}`);
