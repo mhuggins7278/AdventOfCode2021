@@ -80,5 +80,4 @@ const part1Output = parsedData.reduce((acc, row) => {
 console.log(`Part 1 answer: ${part1Output}`)
 
 const part2Output = calculatePart2([...parsedData])
-console.log(part2Output)
-// groupOutputNumbers([...part2Output])
+console.log(`Part 2 Answer ${part2Output}`)
